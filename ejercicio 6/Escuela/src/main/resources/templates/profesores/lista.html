@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/components :: head('Listado de Profesores')}"></head>
+<body>
+<div th:replace="~{layout/components :: sidebar}"></div>
+<div class="main-wrapper">
+    <header th:replace="~{layout/components :: navbar}"></header>
+
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Gestión de Profesores</h1>
+            <p class="page-subtitle">Administración del cuerpo docente de la institución.</p>
+        </div>
+        <a th:href="@{/dashboard/profesores/nuevo}" class="btn-custom btn-custom-primary">
+            <i class="bi bi-person-plus-fill"></i> Registrar Profesor
+        </a>
+    </div>
+
+    <div th:if="${exito}" class="alert-custom alert-custom-success">
+        <i class="bi bi-check-circle-fill alert-custom-icon"></i>
+        <div class="alert-custom-content" th:text="${exito}"></div>
+        <button class="alert-custom-close" type="button" onclick="this.parentElement.remove();"><i class="bi bi-x-lg"></i></button>
+    </div>
+
+    <div class="table-card-custom">
+        <div class="table-responsive">
+            <table class="table-custom">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Docente</th>
+                    <th>DNI</th>
+                    <th>Título</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="profesor : ${profesores}">
+                    <td class="table-order-id" th:text="'#' + ${profesor.id}"></td>
+                    <td>
+                        <div class="table-user-cell">
+                            <div class="table-user-avatar bg-success text-white d-flex align-items-center justify-content-center">
+                                <i class="bi bi-briefcase"></i>
+                            </div>
+                            <div>
+                                <div class="table-user-name" th:text="${profesor.nombre + ' ' + profesor.apellido}"></div>
+                                <div class="table-user-sub" th:text="${profesor.usuario.email}"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td th:text="${profesor.dni}"></td>
+                    <td><span class="badge-table success" th:text="${profesor.titulo}"></span></td>
+                    <td>
+                        <div class="d-flex justify-content-center gap-1">
+                            <a th:href="@{/dashboard/profesores/editar/{id}(id=${profesor.id})}" class="table-btn-action" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <a th:href="@{/dashboard/profesores/eliminar/{id}(id=${profesor.id})}" class="table-btn-action delete" title="Eliminar" onclick="return confirm('¿Confirma la baja de este docente?')"><i class="bi bi-trash"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(profesores)}">
+                    <td colspan="5" class="text-center py-4 text-muted-green">No hay profesores activos en el sistema.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <footer th:replace="~{layout/components :: footer}"></footer>
+</div>
+<th:block th:replace="~{layout/components :: scripts}"></th:block>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/components :: head('Mis Materias')}"></head>
+<body>
+<div th:replace="~{layout/components :: sidebar}"></div>
+<div class="main-wrapper">
+    <header th:replace="~{layout/components :: navbar}"></header>
+
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Mis Materias</h1>
+            <p class="page-subtitle" th:text="'Estado académico de ' + ${alumno.nombre + ' ' + alumno.apellido} + ' (' + ${alumno.grado} + ' Grado)'"></p>
+        </div>
+    </div>
+
+    <div th:if="${exito}" class="alert-custom alert-custom-success">
+        <i class="bi bi-check-circle-fill alert-custom-icon"></i>
+        <div class="alert-custom-content" th:text="${exito}"></div>
+        <button class="alert-custom-close" onclick="this.parentElement.remove();"><i class="bi bi-x-lg"></i></button>
+    </div>
+
+    <div class="table-card-custom">
+        <div class="table-responsive">
+            <table class="table-custom">
+                <thead>
+                <tr>
+                    <th>Materia</th>
+                    <th>Profesor</th>
+                    <th>Aula</th>
+                    <th>Calificación</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="materia : ${alumno.materias}">
+                    <td class="table-product-name" th:text="${materia.nombre}"></td>
+                    <td th:text="${materia.profesor.nombre + ' ' + materia.profesor.apellido}"></td>
+                    <td th:text="'Aula ' + ${materia.aula.numero}"></td>
+                    <td>
+                        <span th:if="${notasMap.containsKey(materia.id)}"
+                            th:text="${notasMap.get(materia.id)}"
+                            class="badge-table success"></span>
+                        <span th:unless="${notasMap.containsKey(materia.id)}"
+                              class="badge-table pending">Sin calificar</span>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(alumno.materias)}">
+                    <td colspan="4" class="text-center py-4 text-muted-green">Aún no estás inscripto en ninguna materia.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <footer th:replace="~{layout/components :: footer}"></footer>
+</div>
+<th:block th:replace="~{layout/components :: scripts}"></th:block>
+</body>
+</html>

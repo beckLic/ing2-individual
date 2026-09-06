@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/components :: head('Listado de Materias')}"></head>
+<body>
+<div th:replace="~{layout/components :: sidebar}"></div>
+<div class="main-wrapper">
+    <header th:replace="~{layout/components :: navbar}"></header>
+
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Gestión de Materias</h1>
+            <p class="page-subtitle">Planificación académica de asignaturas.</p>
+        </div>
+        <a th:href="@{/dashboard/materias/nueva}" class="btn-custom btn-custom-primary">
+            <i class="bi bi-journal-plus"></i> Crear Materia
+        </a>
+    </div>
+
+    <div th:if="${exito}" class="alert-custom alert-custom-success">
+        <i class="bi bi-check-circle-fill alert-custom-icon"></i>
+        <div class="alert-custom-content" th:text="${exito}"></div>
+        <button class="alert-custom-close" type="button" onclick="this.parentElement.remove();"><i class="bi bi-x-lg"></i></button>
+    </div>
+
+    <div class="table-card-custom">
+        <div class="table-responsive">
+            <table class="table-custom">
+                <thead>
+                <tr>
+                    <th>Asignatura</th>
+                    <th>Grado</th>
+                    <th>Profesor a Cargo</th>
+                    <th>Aula</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="materia : ${materias}">
+                    <td class="table-product-name" th:text="${materia.nombre}"></td>
+                    <td><span class="badge-table pending" th:text="${materia.grado}"></span></td>
+                    <td>
+                        <div class="table-user-cell">
+                            <div class="table-user-avatar bg-success text-white d-flex align-items-center justify-content-center">
+                                <i class="bi bi-person"></i>
+                            </div>
+                            <div class="table-user-name" th:text="${materia.profesor.nombre + ' ' + materia.profesor.apellido}"></div>
+                        </div>
+                    </td>
+                    <td th:text="'Aula ' + ${materia.aula.numero}"></td>
+                    <td>
+                        <div class="d-flex justify-content-center gap-1">
+                            <a th:href="@{/dashboard/materias/editar/{id}(id=${materia.id})}" class="table-btn-action" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <a th:href="@{/dashboard/materias/eliminar/{id}(id=${materia.id})}" class="table-btn-action delete" title="Eliminar" onclick="return confirm('¿Confirma la baja de esta materia?')"><i class="bi bi-trash"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(materias)}">
+                    <td colspan="5" class="text-center py-4 text-muted-green">No hay asignaturas registradas.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <footer th:replace="~{layout/components :: footer}"></footer>
+</div>
+<th:block th:replace="~{layout/components :: scripts}"></th:block>
+</body>
+</html>

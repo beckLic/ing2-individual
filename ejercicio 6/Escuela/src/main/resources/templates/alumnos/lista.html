@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/components :: head('Listado de Alumnos')}"></head>
+<body>
+<div th:replace="~{layout/components :: sidebar}"></div>
+
+<div class="main-wrapper">
+    <header th:replace="~{layout/components :: navbar}"></header>
+
+    <!-- Header y botón Nuevo -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Gestión de Alumnos</h1>
+            <p class="page-subtitle">Listado y administración de los estudiantes matriculados.</p>
+        </div>
+        <a th:href="@{/dashboard/alumnos/nuevo}" class="btn-custom btn-custom-primary">
+            <i class="bi bi-person-plus-fill"></i> Registrar Alumno
+        </a>
+    </div>
+
+    <!-- Alertas de éxito o error tras una acción -->
+    <div th:if="${exito}" class="alert-custom alert-custom-success">
+        <i class="bi bi-check-circle-fill alert-custom-icon"></i>
+        <div class="alert-custom-content" th:text="${exito}"></div>
+        <button class="alert-custom-close" type="button" onclick="this.parentElement.remove();"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div th:if="${error}" class="alert-custom alert-custom-danger">
+        <i class="bi bi-exclamation-triangle-fill alert-custom-icon"></i>
+        <div class="alert-custom-content" th:text="${error}"></div>
+        <button class="alert-custom-close" type="button" onclick="this.parentElement.remove();"><i class="bi bi-x-lg"></i></button>
+    </div>
+
+    <!-- Tabla Custom de Spark Admin -->
+    <div class="table-card-custom">
+        <div class="table-responsive">
+            <table class="table-custom">
+                <thead>
+                <tr>
+                    <th>Legajo</th>
+                    <th>Nombre y Apellido</th>
+                    <th>DNI</th>
+                    <th>Grado</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="alumno : ${alumnos}">
+                    <td class="table-order-id" th:text="'#' + ${alumno.legajo}"></td>
+                    <td>
+                        <div class="table-user-cell">
+                            <div class="table-user-avatar bg-primary text-white d-flex align-items-center justify-content-center">
+                                <i class="bi bi-person"></i>
+                            </div>
+                            <div>
+                                <div class="table-user-name" th:text="${alumno.nombre + ' ' + alumno.apellido}"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td th:text="${alumno.dni}"></td>
+                    <td><span class="badge-table pending" th:text="${alumno.grado}"></span></td>
+                    <td>
+                        <div class="d-flex justify-content-center gap-1">
+                            <a th:href="@{/dashboard/alumnos/editar/{id}(id=${alumno.id})}" class="table-btn-action" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <a th:href="@{/dashboard/alumnos/eliminar/{id}(id=${alumno.id})}" class="table-btn-action delete" title="Eliminar" onclick="return confirm('¿Confirma que desea eliminar este alumno? Esta acción no se puede deshacer.')"><i class="bi bi-trash"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(alumnos)}">
+                    <td colspan="5" class="text-center py-4 text-muted-green">No hay alumnos registrados actualmente en el sistema.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer th:replace="~{layout/components :: footer}"></footer>
+</div>
+<th:block th:replace="~{layout/components :: scripts}"></th:block>
+</body>
+</html>

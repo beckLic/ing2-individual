@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/components :: head('Calificar Alumnos')}"></head>
+<body>
+<div th:replace="~{layout/components :: sidebar}"></div>
+<div class="main-wrapper">
+    <header th:replace="~{layout/components :: navbar}"></header>
+
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Calificar Alumnos</h1>
+        </div>
+        <a th:href="@{/portal-profesor/materias}" class="btn-custom btn-custom-light"><i class="bi bi-arrow-left"></i> Volver</a>
+    </div>
+
+    <div th:if="${exito}" class="alert-custom alert-custom-success">
+        <i class="bi bi-check"></i> <span th:text="${exito}"></span>
+    </div>
+
+    <div class="table-card-custom">
+        <table class="table-custom">
+            <thead><tr><th>Legajo</th><th>Alumno</th><th>DNI</th><th>Calificación</th></tr></thead>
+            <tbody>
+            <tr th:each="alumno : ${alumnos}">
+                <td th:text="'#' + ${alumno.legajo}"></td>
+                <td th:text="${alumno.nombre + ' ' + alumno.apellido}"></td>
+                <td th:text="${alumno.dni}"></td>
+                <td>
+                    <form th:action="@{/portal-profesor/calificar}" method="post" class="d-flex gap-2">
+                        <input type="hidden" name="materiaId" th:value="${materiaId}">
+                        <input type="hidden" name="alumnoId" th:value="${alumno.id}">
+                        <input type="number" name="valor" min="1" max="10" required
+                               class="form-control-custom" style="width: 100px;"
+                               th:value="${notasMap.containsKey(alumno.id) ? notasMap.get(alumno.id) : ''}">
+                        <button type="submit" class="btn-custom btn-custom-success btn-custom-sm">Guardar</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(alumnos)}">
+                <td colspan="4" class="text-center py-4">No hay alumnos inscriptos aún.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<th:block th:replace="~{layout/components :: scripts}"></th:block>
+</body>
+</html>

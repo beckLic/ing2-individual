@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/components :: head(${alumnoDTO.id == null ? 'Registrar Alumno' : 'Editar Alumno'})}"></head>
+<body>
+<div th:replace="~{layout/components :: sidebar}"></div>
+
+<div class="main-wrapper">
+    <header th:replace="~{layout/components :: navbar}"></header>
+
+    <div class="page-header">
+        <div>
+            <h1 class="page-title" th:text="${alumnoDTO.id == null ? 'Registrar Nuevo Alumno' : 'Editar Alumno'}"></h1>
+            <p class="page-subtitle">Complete el formulario con los datos correspondientes.</p>
+        </div>
+        <a th:href="@{/dashboard/alumnos}" class="btn-custom btn-custom-light">
+            <i class="bi bi-arrow-left"></i> Volver a la lista
+        </a>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-12 col-lg-8 mx-auto">
+            <div class="card border-light shadow-sm p-4 h-100">
+
+                <!-- Alerta de validaciones generales -->
+                <div th:if="${error}" class="alert-custom alert-custom-danger">
+                    <i class="bi bi-exclamation-triangle-fill alert-custom-icon"></i>
+                    <div class="alert-custom-content" th:text="${error}"></div>
+                    <button class="alert-custom-close" type="button" onclick="this.parentElement.remove();"><i class="bi bi-x-lg"></i></button>
+                </div>
+
+                <form th:action="@{/dashboard/alumnos/guardar}" th:object="${alumnoDTO}" method="post">
+                    <input type="hidden" th:field="*{id}">
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label-custom">Nombre</label>
+                            <input type="text" th:field="*{nombre}" class="form-control-custom" th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid-custom' : ''">
+                            <div class="form-feedback-custom invalid-custom" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label-custom">Apellido</label>
+                            <input type="text" th:field="*{apellido}" class="form-control-custom" th:classappend="${#fields.hasErrors('apellido')} ? 'is-invalid-custom' : ''">
+                            <div class="form-feedback-custom invalid-custom" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></div>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label-custom">Correo Electrónico (Usuario)</label>
+                            <input type="email" th:field="*{mail}" class="form-control-custom" th:classappend="${#fields.hasErrors('mail')} ? 'is-invalid-custom' : ''" placeholder="alumno@escuela.com">
+                            <div class="form-feedback-custom invalid-custom" th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"></div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label-custom">Documento de Identidad (DNI)</label>
+                            <input type="number" th:field="*{dni}" class="form-control-custom" th:classappend="${#fields.hasErrors('dni')} ? 'is-invalid-custom' : ''">
+                            <div class="form-feedback-custom invalid-custom" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label-custom">N° de Legajo</label>
+                            <input type="number" th:field="*{legajo}" class="form-control-custom" th:classappend="${#fields.hasErrors('legajo')} ? 'is-invalid-custom' : ''">
+                            <div class="form-feedback-custom invalid-custom" th:if="${#fields.hasErrors('legajo')}" th:errors="*{legajo}"></div>
+                        </div>
+
+                        <div class="col-12 mb-3">
+                            <label class="form-label-custom">Grado Asignado</label>
+                            <select th:field="*{grado}" class="form-select-custom" th:classappend="${#fields.hasErrors('grado')} ? 'is-invalid-custom' : ''">
+                                <option value="" disabled selected>Seleccione un grado...</option>
+                                <option th:each="gradoOpt : ${T(org.example.enums.Grado).values()}"
+                                        th:value="${gradoOpt}" th:text="${gradoOpt}"></option>
+                            </select>
+                            <div class="form-feedback-custom invalid-custom" th:if="${#fields.hasErrors('grado')}" th:errors="*{grado}"></div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-custom btn-custom-primary w-100 mt-4">
+                        <i class="bi bi-save"></i> Guardar Alumno
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{layout/components :: footer}"></footer>
+</div>
+<th:block th:replace="~{layout/components :: scripts}"></th:block>
+</body>
+</html>

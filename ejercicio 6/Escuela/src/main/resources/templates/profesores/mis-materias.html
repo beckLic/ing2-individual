@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/components :: head('Mis Clases')}"></head>
+<body>
+  <div th:replace="~{layout/components :: sidebar}"></div>
+  <div class="main-wrapper">
+    <header th:replace="~{layout/components :: navbar}"></header>
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Mis Clases Asignadas</h1>
+      </div>
+    </div>
+
+    <div class="table-card-custom">
+      <table class="table-custom">
+        <thead><tr><th>Materia</th><th>Grado</th><th>Aula</th><th class="text-center">Acción</th></tr></thead>
+        <tbody>
+          <tr th:each="materia : ${profesor.materias}">
+            <td class="table-product-name" th:text="${materia.nombre}"></td>
+            <td th:text="${materia.grado}"></td>
+            <td th:text="'Aula ' + ${materia.aula.numero}"></td>
+            <td class="text-center">
+              <a th:href="@{/portal-profesor/materias/{id}/alumnos(id=${materia.id})}" class="btn-custom btn-custom-primary btn-custom-sm">
+                <i class="bi bi-people"></i> Ver Alumnos
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <th:block th:replace="~{layout/components :: scripts}"></th:block>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/components :: head('Inscripción a Materias')}"></head>
+<body>
+<div th:replace="~{layout/components :: sidebar}"></div>
+<div class="main-wrapper">
+    <header th:replace="~{layout/components :: navbar}"></header>
+
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Inscripción a Materias</h1>
+            <p class="page-subtitle">Materias disponibles para tu grado actual.</p>
+        </div>
+    </div>
+
+    <div class="table-card-custom">
+        <div class="table-responsive">
+            <table class="table-custom">
+                <thead>
+                <tr>
+                    <th>Materia</th>
+                    <th>Profesor</th>
+                    <th>Aula</th>
+                    <th class="text-center">Acción</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="materia : ${materiasDisponibles}">
+                    <td class="table-product-name" th:text="${materia.nombre}"></td>
+                    <td th:text="${materia.profesor.nombre + ' ' + materia.profesor.apellido}"></td>
+                    <td th:text="'Aula ' + ${materia.aula.numero}"></td>
+                    <td class="text-center">
+                        <form th:action="@{/estudiantes/inscribir/{id}(id=${materia.id})}" method="post">
+                            <button type="submit" class="btn-custom btn-custom-primary btn-custom-sm">
+                                <i class="bi bi-pencil-square"></i> Inscribirme
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(materiasDisponibles)}">
+                    <td colspan="4" class="text-center py-4 text-muted-green">No hay materias disponibles para inscribirse en este momento.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <footer th:replace="~{layout/components :: footer}"></footer>
+</div>
+<th:block th:replace="~{layout/components :: scripts}"></th:block>
+</body>
+</html>

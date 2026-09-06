@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- ================= FRAGMENTO: HEAD ================= -->
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Spark Admin</title>
+
+    <link rel="icon" type="image/png" th:href="@{/assets/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/assets/libs/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/libs/bootstrap-icons/bootstrap-icons.css}">
+    <link rel="stylesheet" th:href="@{/assets/libs/apexcharts/apexcharts.css}">
+    <link rel="stylesheet" th:href="@{/assets/libs/flatpickr/flatpickr.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/main.css}">
+</head>
+
+<!-- ================= FRAGMENTO: SIDEBAR ================= -->
+<div th:fragment="sidebar" class="sidebar-wrapper" id="sidebar">
+    <a th:href="@{/dashboard}" class="sidebar-brand">
+        <i class="bi bi-asterisk"></i>
+        <span>Sistema Académico</span>
+    </a>
+
+    <div class="flex-grow-1 overflow-y-auto">
+        <div class="sidebar-menu-section">
+            <div class="sidebar-menu-title">Menú Principal</div>
+            <ul class="sidebar-menu-list">
+
+                <!-- ================= MENÚ ADMIN ================= -->
+                <div sec:authorize="hasAuthority('ADMIN')">
+                    <li class="sidebar-menu-item">
+                        <a th:href="@{/dashboard/alumnos}" class="sidebar-menu-link" title="Alumnos">
+                            <i class="bi bi-people-fill"></i><span>Alumnos</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a th:href="@{/dashboard/profesores}" class="sidebar-menu-link" title="Profesores">
+                            <i class="bi bi-briefcase-fill"></i><span>Profesores</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a th:href="@{/dashboard/materias}" class="sidebar-menu-link" title="Materias">
+                            <i class="bi bi-journal-bookmark-fill"></i><span>Materias</span>
+                        </a>
+                    </li>
+                </div>
+
+                <!-- ================= MENÚ ALUMNO ================= -->
+                <div sec:authorize="hasAuthority('ALUMNO')">
+                    <li class="sidebar-menu-item">
+                        <a th:href="@{/estudiantes/materias}" class="sidebar-menu-link" title="Mis Materias">
+                            <i class="bi bi-journal-text"></i><span>Mis Materias</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a th:href="@{/estudiantes/inscripcion}" class="sidebar-menu-link" title="Inscribirme">
+                            <i class="bi bi-pencil-square"></i><span>Inscripción</span>
+                        </a>
+                    </li>
+                </div>
+
+                <!-- ================= MENÚ PROFESOR ================= -->
+                <div sec:authorize="hasAuthority('PROFESOR')">
+                    <li class="sidebar-menu-item">
+                        <a th:href="@{/portal-profesor/materias}" class="sidebar-menu-link" title="Mis Clases">
+                            <i class="bi bi-journal-text"></i><span>Mis Clases</span>
+                        </a>
+                    </li>
+                </div>
+            </ul>
+        </div>
+    </div>
+
+    <div class="sidebar-profile">
+        <img th:src="@{/assets/images/avatar.png}" alt="Avatar" class="sidebar-profile-img">
+        <div class="sidebar-profile-info">
+            <!-- Inyectamos dinámicamente el Email del usuario logueado con Spring Security -->
+            <div class="sidebar-profile-name" sec:authentication="name">Usuario</div>
+            <div class="sidebar-profile-email" sec:authentication="principal.authorities">Rol</div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= FRAGMENTO: NAVBAR ================= -->
+<header th:fragment="navbar" class="navbar-custom">
+    <div class="navbar-left">
+        <button class="btn-desktop-toggle d-none d-xl-flex align-items-center justify-content-center me-3" id="desktop-sidebar-toggle">
+            <i class="bi bi-chevron-bar-left"></i>
+        </button>
+    </div>
+
+    <div class="navbar-search-wrapper">
+        <input type="text" class="navbar-search-input" placeholder="Buscar...">
+        <button class="navbar-search-btn"><i class="bi bi-search"></i></button>
+    </div>
+
+    <div class="navbar-actions">
+        <!-- Profile Dropdown -->
+        <div class="dropdown ms-2">
+            <button class="navbar-profile-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" id="profile-dropdown">
+                <img th:src="@{/assets/images/avatar.png}" alt="Profile" class="navbar-profile-img">
+                <span class="navbar-profile-name d-none d-md-inline" sec:authentication="name">Admin</span>
+                <i class="bi bi-chevron-down navbar-profile-caret"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-profile" aria-labelledby="profile-dropdown">
+                <!-- Botón de Cerrar Sesión conectado a Spring Security -->
+                <li>
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="dropdown-item text-danger w-100 border-0 bg-transparent text-start">
+                            <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<!-- ================= FRAGMENTO: FOOTER ================= -->
+<footer th:fragment="footer" class="footer-custom">
+    <div class="footer-left">
+        <span class="footer-logo"><i class="bi bi-asterisk"></i> Sistema Académico</span>
+    </div>
+</footer>
+
+<!-- ================= FRAGMENTO: SCRIPTS ================= -->
+<th:block th:fragment="scripts">
+    <script th:src="@{/assets/libs/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/assets/libs/apexcharts/apexcharts.min.js}"></script>
+    <script th:src="@{/assets/libs/flatpickr/flatpickr.min.js}"></script>
+    <script th:src="@{/assets/js/dashboard.js}"></script>
+</th:block>
+
+</html>

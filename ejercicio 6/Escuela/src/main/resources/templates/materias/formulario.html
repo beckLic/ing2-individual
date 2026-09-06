@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/components :: head(${materiaDTO.id == null ? 'Crear Materia' : 'Editar Materia'})}"></head>
+<body>
+<div th:replace="~{layout/components :: sidebar}"></div>
+<div class="main-wrapper">
+    <header th:replace="~{layout/components :: navbar}"></header>
+
+    <div class="page-header">
+        <div>
+            <h1 class="page-title" th:text="${materiaDTO.id == null ? 'Crear Asignatura' : 'Editar Asignatura'}"></h1>
+        </div>
+        <a th:href="@{/dashboard/materias}" class="btn-custom btn-custom-light">
+            <i class="bi bi-arrow-left"></i> Volver a la lista
+        </a>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-12 col-lg-8 mx-auto">
+            <div class="card border-light shadow-sm p-4 h-100">
+                <div th:if="${error}" class="alert-custom alert-custom-danger">
+                    <i class="bi bi-exclamation-triangle-fill alert-custom-icon"></i>
+                    <div class="alert-custom-content" th:text="${error}"></div>
+                    <button class="alert-custom-close" type="button" onclick="this.parentElement.remove();"><i class="bi bi-x-lg"></i></button>
+                </div>
+
+                <form th:action="@{/dashboard/materias/guardar}" th:object="${materiaDTO}" method="post">
+                    <input type="hidden" th:field="*{id}">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label-custom">Nombre de la Materia</label>
+                            <input type="text" th:field="*{nombre}" class="form-control-custom" th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid-custom' : ''" placeholder="Ej: Matemáticas">
+                            <div class="form-feedback-custom invalid-custom" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label-custom">Grado</label>
+                            <select th:field="*{grado}" class="form-select-custom" th:classappend="${#fields.hasErrors('grado')} ? 'is-invalid-custom' : ''">
+                                <option value="" disabled selected>Seleccione...</option>
+                                <option th:each="gradoOpt : ${T(org.example.enums.Grado).values()}" th:value="${gradoOpt}" th:text="${gradoOpt}"></option>
+                            </select>
+                            <div class="form-feedback-custom invalid-custom" th:if="${#fields.hasErrors('grado')}" th:errors="*{grado}"></div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label-custom">Profesor a Cargo</label>
+                            <select th:field="*{profesorId}" class="form-select-custom" th:classappend="${#fields.hasErrors('profesorId')} ? 'is-invalid-custom' : ''">
+                                <option value="" disabled selected>Seleccionar docente...</option>
+                                <option th:each="prof : ${profesores}" th:value="${prof.id}" th:text="${prof.nombre + ' ' + prof.apellido}"></option>
+                            </select>
+                            <div class="form-feedback-custom invalid-custom" th:if="${#fields.hasErrors('profesorId')}" th:errors="*{profesorId}"></div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label-custom">Aula Asignada</label>
+                            <select th:field="*{aulaId}" class="form-select-custom" th:classappend="${#fields.hasErrors('aulaId')} ? 'is-invalid-custom' : ''">
+                                <option value="" disabled selected>Seleccionar aula...</option>
+                                <option th:each="aula : ${aulas}" th:value="${aula.id}" th:text="'Aula ' + ${aula.numero} + ' (Cap: ' + ${aula.capacidad} + ')'"></option>
+                            </select>
+                            <div class="form-feedback-custom invalid-custom" th:if="${#fields.hasErrors('aulaId')}" th:errors="*{aulaId}"></div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-custom btn-custom-primary w-100 mt-4">
+                        <i class="bi bi-save"></i> Guardar Materia
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer th:replace="~{layout/components :: footer}"></footer>
+</div>
+<th:block th:replace="~{layout/components :: scripts}"></th:block>
+</body>
+</html>

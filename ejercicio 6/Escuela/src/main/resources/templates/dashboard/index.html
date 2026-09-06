@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<!-- Reemplaza el Head -->
+<head th:replace="~{layout/components :: head('Dashboard - Administración')}"></head>
+
+<body>
+<!-- Inyecta el Menú Lateral -->
+<div th:replace="~{layout/components :: sidebar}"></div>
+
+<div class="main-wrapper">
+    <!-- Inyecta la Barra Superior -->
+    <header th:replace="~{layout/components :: navbar}"></header>
+
+    <!-- INICIO: Contenido principal (Cards y Gráficos) -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Dashboard</h1>
+            <p class="page-subtitle">Panel de Control de Administración Académica.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="row g-4">
+                <!-- Tarjeta 1 -->
+                <div class="col-md-4">
+                    <div class="card card-stat d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="card-header">
+                                <span class="stat-label">Total Alumnos</span>
+                            </div>
+                            <div class="stat-value">1,420</div>
+                            <div class="trend-badge trend-up">
+                                <i class="bi bi-arrow-up-right"></i><span>+12% este mes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tarjeta 2 -->
+                <div class="col-md-4">
+                    <div class="card card-stat d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="card-header">
+                                <span class="stat-label">Profesores Activos</span>
+                            </div>
+                            <div class="stat-value">45</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tarjeta 3 -->
+                <div class="col-md-4">
+                    <div class="card card-stat d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="card-header">
+                                <span class="stat-label">Materias Dictadas</span>
+                            </div>
+                            <div class="stat-value">84</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- FIN: Contenido principal -->
+
+    <!-- Inyecta el Footer -->
+    <footer th:replace="~{layout/components :: footer}"></footer>
+</div>
+
+<!-- Inyecta los Scripts -->
+<th:block th:replace="~{layout/components :: scripts}"></th:block>
+</body>
+</html>
