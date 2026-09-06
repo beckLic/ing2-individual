@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::div.content-area})}">
+<body>
+<div class="content-area">
+
+    <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h1 class="page-title">Facturación</h1>
+            <p class="page-subtitle">Gestión de Órdenes de Compra a Proveedores.</p>
+        </div>
+        <a th:href="@{/ordenes/nueva}" class="btn-custom btn-custom-primary">
+            <i class="bi bi-receipt"></i> Nueva Factura
+        </a>
+    </div>
+
+    <div class="table-card-custom">
+        <div class="table-responsive">
+            <table class="table-custom">
+                <thead>
+                <tr>
+                    <th>Nº Factura (ID)</th>
+                    <th>Fecha</th>
+                    <th>Proveedor</th>
+                    <th>Total Pagado</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="orden : ${ordenes}">
+                    <td class="table-order-id" th:text="${#strings.substring(orden.id, 0, 8)}">ORD-123</td>
+                    <td th:text="${#dates.format(orden.fecha, 'dd/MM/yyyy HH:mm')}">14/02/2026</td>
+                    <td th:text="${orden.proveedorRazonSocial}">Empresa S.A.</td>
+                    <td class="table-amount" th:text="'$ ' + ${orden.totalPagado}">$ 150.00</td>
+
+                    <td>
+                        <div class="d-flex justify-content-center gap-1">
+                            <!-- Botón para ver y cargar detalles -->
+                            <a th:href="@{/ordenes/{id}(id=${orden.id})}" class="table-btn-action" title="Ver Detalles">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <!-- Botón para anular factura -->
+                            <a th:href="@{/ordenes/eliminar/{id}(id=${orden.id})}" class="table-btn-action delete" title="Anular" onclick="return confirm('¿Anular esta factura?');">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${ordenes.empty}">
+                    <td colspan="5" class="text-center py-4 text-muted-green">No hay facturas registradas.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

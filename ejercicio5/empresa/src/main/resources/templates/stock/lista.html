@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::div.content-area})}">
+<body>
+<div class="content-area">
+
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Movimientos de Stock</h1>
+            <p class="page-subtitle">Historial de entradas y salidas del producto seleccionado.</p>
+        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a th:href="@{/productos}" class="text-decoration-none text-muted-green">Productos</a></li>
+                <li class="breadcrumb-item active text-main" aria-current="page">Inventario</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Columna Izquierda: Formulario de Ajuste Manual -->
+        <div class="col-lg-4">
+            <div class="card border-light shadow-sm p-4">
+                <h5 class="card-title mb-4">Ajuste Manual</h5>
+
+                <form th:action="@{/stock/registrar}" method="POST">
+                    <!-- Mandamos el ID del producto oculto -->
+                    <input type="hidden" name="productoId" th:value="${productoId}">
+
+                    <div class="mb-3">
+                        <label class="form-label-custom">Tipo de Movimiento</label>
+                        <!-- El 'name' coincide con los @RequestParam del controlador -->
+                        <select name="tipo" class="form-select-custom" required>
+                            <option value="" disabled selected>Seleccione...</option>
+                            <option value="ENTRADA">ENTRADA (Ingreso)</option>
+                            <option value="SALIDA">SALIDA (Egreso o Venta)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label-custom">Cantidad</label>
+                        <input type="number" name="cantidad" class="form-control-custom" min="1" required>
+                    </div>
+
+                    <button type="submit" class="btn-custom btn-custom-primary w-100">
+                        <i class="bi bi-save"></i> Registrar Movimiento
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Columna Derecha: Tabla de Historial -->
+        <div class="col-lg-8">
+            <div class="table-card-custom">
+                <div class="table-responsive">
+                    <table class="table-custom">
+                        <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>Cantidad Afectada</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="mov : ${movimientos}">
+                            <td th:text="${#dates.format(mov.fechaMovimiento, 'dd/MM/yyyy HH:mm')}">15/02/2026</td>
+
+                            <!-- Dibujamos el badge dependiendo del Enum -->
+                            <td>
+                                <span th:if="${mov.tipo.name() == 'ENTRADA'}" class="badge-table success">ENTRADA</span>
+                                <span th:if="${mov.tipo.name() == 'SALIDA'}" class="badge-table failed">SALIDA</span>
+                            </td>
+
+                            <td class="table-amount" th:text="${mov.tipo.name() == 'ENTRADA' ? '+' : '-'} + ${mov.cantActual}">+10</td>
+                        </tr>
+
+                        <tr th:if="${movimientos == null or movimientos.empty}">
+                            <td colspan="3" class="text-center py-4 text-muted-green">No hay historial de movimientos para este producto.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

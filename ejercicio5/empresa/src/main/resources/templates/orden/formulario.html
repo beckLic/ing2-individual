@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::div.content-area})}">
+<body>
+<div class="content-area">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Nueva Factura</h1>
+            <p class="page-subtitle">Inicie una nueva orden seleccionando el proveedor.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-lg-8 offset-lg-2">
+            <div class="card border-light shadow-sm p-4">
+                <form th:action="@{/ordenes/guardar}" th:object="${ordenDto}" method="POST">
+
+                    <div class="mb-4">
+                        <label class="form-label-custom">Seleccione el Proveedor</label>
+                        <select th:field="*{proveedorCuit}" class="form-select-custom" required>
+                            <option value="" disabled selected>Elegir proveedor...</option>
+                            <option th:each="prov : ${proveedores}"
+                                    th:value="${prov.cuit}"
+                                    th:text="${prov.razonSocial} + ' (CUIT: ' + ${prov.cuit} + ')'">
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- El total inicia en 0. Se sumará solo cuando agreguemos detalles -->
+                    <input type="hidden" th:field="*{totalPagado}">
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a th:href="@{/ordenes}" class="btn-custom btn-custom-light">Cancelar</a>
+                        <button type="submit" class="btn-custom btn-custom-primary">
+                            <i class="bi bi-arrow-right-circle"></i> Continuar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

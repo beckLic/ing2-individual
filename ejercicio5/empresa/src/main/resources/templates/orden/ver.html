@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::div.content-area})}">
+<body>
+<div class="content-area">
+    <div class="page-header d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title" th:text="'Factura #' + ${#strings.substring(orden.id, 0, 8)}">Factura</h1>
+            <p class="page-subtitle" th:text="'Proveedor: ' + ${orden.proveedorRazonSocial} + ' | Fecha: ' + ${#dates.format(orden.fecha, 'dd/MM/yyyy')}"></p>
+        </div>
+        <h2 class="text-success m-0" th:text="'Total: $ ' + ${orden.totalPagado}">$ 0.00</h2>
+    </div>
+
+    <div class="row g-4">
+        <!-- Columna Izquierda: Formulario para Agregar Detalle -->
+        <div class="col-lg-4">
+            <div class="card border-light shadow-sm p-4">
+                <h5 class="card-title mb-4">Agregar Producto</h5>
+
+                <!-- Atentos acá: el action va a DetalleController -->
+                <form th:action="@{/detalles/agregar/{id}(id=${orden.id})}" th:object="${detalleDto}" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label-custom">Producto</label>
+                        <select th:field="*{productoId}" class="form-select-custom" required>
+                            <option value="" disabled selected>Seleccione...</option>
+                            <option th:each="prod : ${productos}"
+                                    th:value="${prod.id}"
+                                    th:text="${prod.nombre} + ' (' + ${prod.marca} + ')'">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label-custom">Cantidad</label>
+                        <input type="number" th:field="*{cantidad}" class="form-control-custom" min="1" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label-custom">Subtotal cobrado ($)</label>
+                        <input type="number" step="0.01" th:field="*{subtotal}" class="form-control-custom" required>
+                    </div>
+                    <button type="submit" class="btn-custom btn-custom-secondary w-100">
+                        <i class="bi bi-plus-circle"></i> Agregar a la factura
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Columna Derecha: Tabla de Detalles -->
+        <div class="col-lg-8">
+            <div class="table-card-custom">
+                <div class="table-responsive">
+                    <table class="table-custom">
+                        <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                            <th class="text-center">Quitar</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="detalle : ${orden.detalles}" th:if="${!detalle.eliminado}">
+                            <td class="table-product-name" th:text="${detalle.productoNombre}"></td>
+                            <td th:text="${detalle.cantidad} + ' un.'"></td>
+                            <td class="table-amount" th:text="'$ ' + ${detalle.subtotal}"></td>
+                            <td>
+                                <div class="d-flex justify-content-center">
+                                    <!-- Apunta a eliminarDetalle en DetalleController -->
+                                    <a th:href="@{/detalles/eliminar/{id}(id=${detalle.id})}" class="table-btn-action delete">
+                                        <i class="bi bi-x-lg"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${orden.detalles == null or orden.detalles.empty}">
+                            <td colspan="4" class="text-center py-4 text-muted-green">Aún no hay productos en esta factura.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

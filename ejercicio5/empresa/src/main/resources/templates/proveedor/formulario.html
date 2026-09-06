@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::div.content-area})}">
+<body>
+<div class="content-area">
+
+    <!-- Header de la página -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title" th:text="${proveedorDto.cuit == null} ? 'Nuevo Proveedor' : 'Editar Proveedor'">Formulario</h1>
+            <p class="page-subtitle">Completá los datos requeridos para el registro.</p>
+        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a th:href="@{/proveedores}" class="text-decoration-none text-muted-green">Proveedores</a></li>
+                <li class="breadcrumb-item active text-main" aria-current="page">Formulario</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-lg-8 offset-lg-2">
+            <div class="card border-light shadow-sm p-4">
+                <h5 class="card-title mb-4">Datos del Proveedor</h5>
+
+                <!-- Formulario mapeado al DTO -->
+                <form th:action="@{/proveedores/guardar}" th:object="${proveedorDto}" method="POST">
+
+                    <div class="mb-4">
+                        <label for="cuit" class="form-label-custom">CUIT (Sin guiones)</label>
+                        <!-- Si estamos editando, el CUIT es de solo lectura (readonly) para no romper la llave primaria -->
+                        <input type="number" id="cuit" th:field="*{cuit}" class="form-control-custom" placeholder="Ej: 30123456789" required th:readonly="${proveedorDto.cuit != null}">
+                        <div class="form-feedback-custom valid-custom mt-2" th:if="${proveedorDto.cuit != null}">
+                            <i class="bi bi-info-circle-fill"></i> El CUIT no se puede modificar una vez creado.
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="razonSocial" class="form-label-custom">Razón Social</label>
+                        <input type="text" id="razonSocial" th:field="*{razonSocial}" class="form-control-custom" placeholder="Ej: Empresa S.A." required>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a th:href="@{/proveedores}" class="btn-custom btn-custom-light">Cancelar</a>
+                        <button type="submit" class="btn-custom btn-custom-primary">
+                            <i class="bi bi-save"></i> Guardar Proveedor
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

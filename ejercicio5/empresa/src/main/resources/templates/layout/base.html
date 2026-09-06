@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Didáctico Spring Boot</title>
+    <!-- Referencias estáticas a la plantilla Spark Admin -->
+    <link rel="stylesheet" th:href="@{/assets/libs/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/libs/bootstrap-icons/bootstrap-icons.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/main.css}">
+</head>
+<body>
+<!-- SIDEBAR -->
+<div class="sidebar-wrapper" id="sidebar">
+    <a th:href="@{/home}" class="sidebar-brand">
+        <i class="bi bi-asterisk"></i>
+        <span>Sistema MVC</span>
+    </a>
+    <div class="flex-grow-1 overflow-y-auto">
+        <div class="sidebar-menu-section">
+            <div class="sidebar-menu-title">Principal</div>
+            <ul class="sidebar-menu-list">
+                <li class="sidebar-menu-item">
+                    <a th:href="@{/home}" class="sidebar-menu-link">
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-menu-section">
+            <div class="sidebar-menu-title">Módulos</div>
+            <ul class="sidebar-menu-list">
+                <li class="sidebar-menu-item">
+                    <a th:href="@{/productos}" class="sidebar-menu-link">
+                        <i class="bi bi-box-seam"></i>
+                        <span>Productos</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a th:href="@{/proveedores}" class="sidebar-menu-link">
+                        <i class="bi bi-truck"></i>
+                        <span>Proveedores</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a th:href="@{/ordenes}" class="sidebar-menu-link">
+                        <i class="bi bi-receipt"></i>
+                        <span>Facturas (Órdenes)</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <!-- Redirige dinámicamente al primer producto o muestra un menú de selección de stock -->
+                    <a th:href="@{/productos}" class="sidebar-menu-link">
+                        <i class="bi bi-boxes"></i>
+                        <span>Inventario / Stock</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="sidebar-profile">
+        <div class="sidebar-profile-info">
+            <div class="sidebar-profile-name">Usuario Actual</div>
+            <a th:href="@{/login}" class="text-danger" style="font-size: 0.8rem; text-decoration: none;">
+                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- MAIN CONTENT AREA -->
+<div class="main-wrapper">
+    <header class="navbar-custom">
+        <div class="navbar-left">
+            <button class="btn-desktop-toggle d-none d-xl-flex align-items-center justify-content-center me-3" id="desktop-sidebar-toggle">
+                <i class="bi bi-chevron-bar-left"></i>
+            </button>
+        </div>
+        <div class="navbar-search-wrapper">
+            <h5 class="m-0 text-muted">Gestión Interna</h5>
+        </div>
+    </header>
+
+    <!-- AQUI SE INYECTARÁ EL CONTENIDO DE CADA PANTALLA -->
+    <div th:replace="${content}"></div>
+
+</div>
+
+<script th:src="@{/assets/libs/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/js/dashboard.js}"></script>
+</body>
+</html>

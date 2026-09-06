@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::div.content-area})}">
+<body>
+<div class="content-area">
+
+    <!-- Header con Dropdown para elegir qué crear -->
+    <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h1 class="page-title">Inventario de Productos</h1>
+            <p class="page-subtitle">Gestión de Software y Hardware del sistema.</p>
+        </div>
+
+        <div class="dropdown">
+            <button class="btn-custom btn-custom-primary dropdown-toggle" type="button" id="btnNuevoProd" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-plus-lg"></i> Agregar Producto
+            </button>
+            <ul class="dropdown-menu dropdown-menu-custom" aria-labelledby="btnNuevoProd">
+                <li><a class="dropdown-item" th:href="@{/software/nuevo}"><i class="bi bi-disc"></i> Nuevo Software</a></li>
+                <li><a class="dropdown-item" th:href="@{/hardware/nuevo}"><i class="bi bi-pc-display"></i> Nuevo Hardware</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Tarjeta de la Tabla -->
+    <div class="table-card-custom">
+        <div class="table-responsive">
+            <table class="table-custom">
+                <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Producto</th>
+                    <th>Marca</th>
+                    <th>Tipo</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="prod : ${productos}">
+                    <td class="table-order-id" th:text="${#strings.substring(prod.id, 0, 8)} + '...'">PROD-123</td>
+                    <td class="table-product-name" th:text="${prod.nombre}">Nombre Prod</td>
+                    <td th:text="${prod.marca}">Marca</td>
+
+                    <!-- Etiqueta dinámica según la clase hija -->
+                    <td>
+                        <span class="badge-table success" th:if="${prod.class.simpleName == 'SoftwareDTO'}">Software</span>
+                        <span class="badge-table pending" th:if="${prod.class.simpleName == 'HardwareDTO'}">Hardware</span>
+                    </td>
+
+                    <!-- Botones dinámicos según la clase hija -->
+                    <td>
+                        <div class="d-flex justify-content-center gap-1">
+                            <a th:if="${prod.class.simpleName == 'SoftwareDTO'}" th:href="@{/software/editar/{id}(id=${prod.id})}" class="table-btn-action" title="Editar Software"><i class="bi bi-pencil"></i></a>
+                            <a th:if="${prod.class.simpleName == 'HardwareDTO'}" th:href="@{/hardware/editar/{id}(id=${prod.id})}" class="table-btn-action" title="Editar Hardware"><i class="bi bi-pencil"></i></a>
+
+                            <a th:href="@{/productos/eliminar/{id}(id=${prod.id})}" class="table-btn-action delete" title="Eliminar" onclick="return confirm('¿Seguro que desea eliminar este producto?');"><i class="bi bi-trash"></i></a>
+                        </div>
+                    </td>
+                    <!-- Botones dinámicos según la clase hija -->
+                    <td>
+                        <div class="d-flex justify-content-center gap-1">
+
+                            <!-- NUEVO BOTÓN PARA VER STOCK -->
+                            <a th:href="@{/stock/{id}(id=${prod.id})}" class="table-btn-action text-info" title="Ver Stock">
+                                <i class="bi bi-box-seam"></i>
+                            </a>
+
+                            <a th:if="${prod.class.simpleName == 'SoftwareDTO'}" th:href="@{/software/editar/{id}(id=${prod.id})}" class="table-btn-action" title="Editar Software"><i class="bi bi-pencil"></i></a>
+                            <a th:if="${prod.class.simpleName == 'HardwareDTO'}" th:href="@{/hardware/editar/{id}(id=${prod.id})}" class="table-btn-action" title="Editar Hardware"><i class="bi bi-pencil"></i></a>
+                            <a th:href="@{/productos/eliminar/{id}(id=${prod.id})}" class="table-btn-action delete" title="Eliminar" onclick="return confirm('¿Seguro que desea eliminar este producto?');"><i class="bi bi-trash"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${productos.empty}">
+                    <td colspan="5" class="text-center py-4 text-muted-green">No hay productos en el inventario.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

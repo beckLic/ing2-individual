@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::div.content-area})}">
+<body>
+<div class="content-area">
+
+    <!-- Header de la página -->
+    <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h1 class="page-title">Proveedores</h1>
+            <p class="page-subtitle">Gestión del listado de proveedores del sistema.</p>
+        </div>
+        <!-- Botón de Alta -->
+        <a th:href="@{/proveedores/nuevo}" class="btn-custom btn-custom-primary">
+            <i class="bi bi-plus-lg"></i> Agregar Proveedor
+        </a>
+    </div>
+
+    <!-- Tarjeta de la Tabla -->
+    <div class="table-card-custom">
+        <div class="table-responsive">
+            <table class="table-custom">
+                <thead>
+                <tr>
+                    <th>CUIT</th>
+                    <th>Razón Social</th>
+                    <th>Productos Asociados</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Iteración de Thymeleaf sobre la lista de DTOs -->
+                <tr th:each="prov : ${proveedores}">
+                    <td class="table-order-id" th:text="${prov.cuit}">30111111112</td>
+                    <td class="table-product-name" th:text="${prov.razonSocial}">Empresa S.A.</td>
+
+                    <!-- Mostramos cuántos productos tiene o un mensaje si no tiene -->
+                    <td>
+                        <span class="badge-table pending" th:if="${prov.nombresProductos == null or prov.nombresProductos.empty}">Sin productos</span>
+                        <span class="badge-table success" th:unless="${prov.nombresProductos == null or prov.nombresProductos.empty}" th:text="${prov.nombresProductos.size()} + ' producto(s)'"></span>
+                    </td>
+
+                    <!-- Botones de Modificación y Baja -->
+                    <td>
+                        <div class="d-flex justify-content-center gap-1">
+                            <a th:href="@{/proveedores/editar/{cuit}(cuit=${prov.cuit})}" class="table-btn-action" title="Editar proveedor">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <!-- Baja: Manda el CUIT por URL al controlador -->
+                            <a th:href="@{/proveedores/eliminar/{cuit}(cuit=${prov.cuit})}" class="table-btn-action delete" title="Eliminar proveedor" onclick="return confirm('¿Estás seguro de eliminar este proveedor?');">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Estado vacío didáctico -->
+                <tr th:if="${proveedores.empty}">
+                    <td colspan="4" class="text-center py-4 text-muted-green">No hay proveedores registrados en el sistema.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

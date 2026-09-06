@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::div.content-area})}">
+<body>
+<div class="content-area">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title" th:text="${hardwareDto.id == null} ? 'Nuevo Hardware' : 'Editar Hardware'">Formulario</h1>
+            <p class="page-subtitle">Complete las características del componente físico.</p>
+        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a th:href="@{/productos}" class="text-decoration-none text-muted-green">Productos</a></li>
+                <li class="breadcrumb-item active text-main" aria-current="page">Hardware</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-lg-8 offset-lg-2">
+            <div class="card border-light shadow-sm p-4">
+                <form th:action="@{/hardware/guardar}" th:object="${hardwareDto}" method="POST">
+
+                    <input type="hidden" th:field="*{id}">
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label-custom">Nombre del Componente</label>
+                            <input type="text" th:field="*{nombre}" class="form-control-custom" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label-custom">Marca / Fabricante</label>
+                            <input type="text" th:field="*{marca}" class="form-control-custom" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label-custom">Número de Serie</label>
+                            <input type="text" th:field="*{numeroSerie}" class="form-control-custom" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label-custom">Garantía (Meses)</label>
+                            <input type="number" th:field="*{garantiaMeses}" class="form-control-custom" required min="0">
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a th:href="@{/productos}" class="btn-custom btn-custom-light">Cancelar</a>
+                        <button type="submit" class="btn-custom btn-custom-primary"><i class="bi bi-save"></i> Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

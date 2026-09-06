@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::div.content-area})}">
+<body>
+<div class="content-area">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Dashboard Principal</h1>
+            <p class="page-subtitle">Bienvenido al sistema didáctico de gestión MVC.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card alert-green-card">
+                <div class="position-relative z-index-2">
+                    <div class="alert-green-text mt-3">Gestioná tus Productos y Stock desde el menú lateral.</div>
+                </div>
+                <a th:href="@{/productos}" class="alert-green-link z-index-2">
+                    <span>Ir a Productos</span>
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-stat d-flex flex-column justify-content-between">
+                <div>
+                    <div class="card-header">
+                        <span class="stat-label">Módulo Proveedores</span>
+                    </div>
+                    <div class="stat-value">Activo</div>
+                </div>
+                <a th:href="@{/proveedores}" class="btn btn-outline-dark mt-3">Ver Proveedores</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-stat d-flex flex-column justify-content-between">
+                <div>
+                    <div class="card-header">
+                        <span class="stat-label">Módulo Facturas</span>
+                    </div>
+                    <div class="stat-value">Activo</div>
+                </div>
+                <a th:href="@{/ordenes}" class="btn btn-outline-dark mt-3">Ver Facturación</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
