@@ -4,7 +4,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 // Importamos aserciones extra para Jest (como toBeInTheDocument)
 import '@testing-library/jest-dom'; 
 
-import Saludo from './Saludo';
+import Saludo from './saludo';
 
 // 'describe' y 'test' provienen de Jest (el "laboratorio")
 describe('Componente Saludo', () => {
